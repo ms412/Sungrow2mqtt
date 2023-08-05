@@ -29,7 +29,7 @@ import logging
 from configobj import ConfigObj
 from library.mqttclientV2 import mqttclient
 from library.logger import loghandler
-from library.sungrowWebsocket import SungrowWS
+from library.SungrowWS import SungrowWS
 
 class SungrowQuery(object):
 

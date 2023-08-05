@@ -1,15 +1,15 @@
-#Contents of /etc/systemd/system/SungrowQuery.service
+#Contents of /etc/systemd/system/Sungrow2mqtt.service
 #systemctl daemon-reload
-#systemctl enable SungrowQuery.service
-#systemctl start SungrowQuery.service
+#systemctl enable Sungrow2mqtt.service
+#systemctl start Sungrow2mqtt.service
 
 [Unit]
-Description=Sungrow Query
+Description=Sungrow2mqtt
 After=multi-user.target
 
 [Service]
 Type=idle
-ExecStart=/opt/SungrowQuery/SungrowQuery.py /opt/SungrowQuery/SungrowQuery.config
+ExecStart=/opt/Sungrow2mqtt/Sungrow2mqtt.py /opt/Sungrow2mqtt/Sungrow2mqtt.config
 Restart=on-failure
 RestartSec=5s
 
