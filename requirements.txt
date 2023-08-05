@@ -1,0 +1,4 @@
+
+configobj==5.0.8
+paho-mqtt==1.6.1
+websocket==0.2.1
