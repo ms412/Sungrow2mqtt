@@ -14,8 +14,8 @@
 
 
 __app__ = "Sungrow Inverter Query"
-__VERSION__ = "0.1"
-__DATE__ = "07.05.2023"
+__VERSION__ = "0.2"
+__DATE__ = "31.08.2023"
 __author__ = "Markus Schiesser"
 __contact__ = "M.Schiesser@gmail.com"
 __copyright__ = "Copyright (C) 2023 Markus Schiesser"
@@ -113,6 +113,10 @@ class SungrowQuery(object):
             self._sungrow = SungrowWS(_host,self._rootLoggerName)
             self._sungrow.connect()
 
+    def stopSungrow(self):
+        self._log.debug('Methode: stopSungrow()')
+        self._sungrow.close()
+
     def queryData(self):
 
         _data =  self._sungrow.getData()
@@ -132,9 +136,11 @@ class SungrowQuery(object):
         self.readConfig()
         self.startLogger()
         self.startMqttBroker()
-        self.startSungrow()
+        #self.startSungrow()
         while(True):
+            self.startSungrow()
             self.queryData()
+            self.stopSungrow()
             time.sleep(15)
 
 if __name__ == "__main__":

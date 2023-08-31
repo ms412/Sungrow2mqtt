@@ -1,6 +1,6 @@
 __app__ = "Sungrow Webscoket"
-__VERSION__ = "0.2"
-__DATE__ = "07.05.2023"
+__VERSION__ = "0.3"
+__DATE__ = "31.08.2023"
 __author__ = "Markus Schiesser"
 __contact__ = "M.Schiesser@gmail.com"
 __copyright__ = "Copyright (C) 2023 Markus Schiesser"
@@ -21,7 +21,7 @@ class SungrowWS(object):
         _libName = str(__name__.rsplit('.', 1)[-1])
         self._log = logging.getLogger(logger + '.' + _libName + '.' + self.__class__.__name__)
 
-        self._log.debug('Create MQTT mqttclient Object')
+        self._log.debug('Create Websocket Object')
 
         self._host = host
         self._port = port
@@ -35,6 +35,7 @@ class SungrowWS(object):
         self.ws_endpoint = "ws://" + str(self._host) + ":" + str(self._port) + "/ws/home/overview"
 
     def connect(self):
+        self._log.debug('Connect to WebSocket Server')
 
         self._websocket = websocket.WebSocket()
         self._websocket.connect(self.ws_endpoint)
@@ -51,11 +52,16 @@ class SungrowWS(object):
 
         if _data['result_msg'] == 'success':
             self._token = _data['result_data']['token']
+            self._log.debug('Connected to WS Server with token %s',self._token)
         else:
             self._log.error('Failed to get a tocken from inverter: ', self._host)
             return False
 
         return True
+
+    def close(self):
+        self._log.info('Close Websocket')
+        self._websocket.close()
 
     def getData(self):
 
@@ -75,6 +81,7 @@ class SungrowWS(object):
         if _data['result_msg'] == 'success':
             _dev_id = str(_data['result_data']['list'][0]['dev_id'])
             self._data['INVENTAR'] = _data['result_data']['list']
+            self._log.debug('INVENTAR %s',self._data)
         else:
             self._log.error('Failed to query inventor data from inverter: ', self._host)
             return False
@@ -108,6 +115,7 @@ class SungrowWS(object):
                 _directData[_key] = dict(_value)
 
             self._data['DIRECT'] = _directData
+            self._log.debug('DIRECT %s', self._data)
         else:
             self._log.error('Failed to query DC data from inverter: ', self._host)
             return False
@@ -136,6 +144,7 @@ class SungrowWS(object):
                 _key = item['data_name']
                 _realData[_key] = dict(_value)
             self._data['REAL'] = _realData
+            self._log.debug('REAL %s', self._data)
            # print('4', _realData)
         else:
             self._log.error('Failed to query AC data from inverter: ', self._host)
